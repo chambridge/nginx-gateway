@@ -1,0 +1,24 @@
+{
+    "entitlements":{},
+    "identity": {
+        "internal": {
+            "cross_access": false,
+            "auth_time": 0,
+            "org_id": "%ORG_ID%"
+        },
+        "account_number": null,
+        "org_id": "%ORG_ID%",
+        "auth_type": "jwt-auth",
+        "user": {
+            "is_active": true,
+            "is_org_admin": true,
+            "username": "%USERNAME%",
+            "email": "%EMAIL%",
+            "first_name": "%FIRST_NAME%",
+            "last_name": "%LAST_NAME%",
+            "is_internal": false
+        },
+        "type": "User"
+    }
+ }
+ 

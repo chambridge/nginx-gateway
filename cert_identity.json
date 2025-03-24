@@ -1,0 +1,15 @@
+{
+    "identity": {
+        "org_id": "%ORG_ID%",
+        "internal": {
+            "org_id": "%ORG_ID%"
+        },
+        "type": "System",
+        "auth_type": "cert-auth",
+        "system": {
+            "cn": "%CN%",
+            "cert_type": "satellite" 
+        }
+    }
+ }
+ 
