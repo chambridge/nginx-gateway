@@ -37,6 +37,7 @@ podman run -d --network my-network \
     --name nginx-gateway \ 
     -v /path/to/sockets:/sockets:Z \
     nginx-gateway:latest
+```
 
 ### Example Usage
 NGINX listens on /sockets/nginx.sock with mTLS. Use curl with the --unix-socket option and client certificates to test.
