@@ -11,23 +11,18 @@ RUN mkdir -p /usr/share/nginx/html/static/release \
     && mkdir -p /etc/nginx/certs \
     && mkdir -p /var/log/nginx \
     && mkdir -p /etc/nginx/perl \
-    && chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx \
+    && mkdir -p /var/lib/nginx/tmp/client_body \
     && chmod 770 /sockets \
-    && chmod 770 /var/log/nginx
+    && chmod 770 /var/log/nginx \
+    && chmod -R 750 /var/lib/nginx
 
-COPY insights-core.egg /usr/share/nginx/html/static/release/insights-core.egg
-COPY insights-core.egg.asc /usr/share/nginx/html/static/release/insights-core.egg.asc
-
-COPY certs/nginx.crt /etc/nginx/certs/nginx.crt
-COPY certs/nginx.key /etc/nginx/certs/nginx.key
-COPY certs/ca.crt /etc/nginx/certs/ca.crt
-
-RUN mkdir -p /etc/nginx/njs && chown nginx:nginx /etc/nginx/njs
 COPY cert_identity.json /etc/nginx/perl/cert_identity.json
 COPY jwt_identity.json /etc/nginx/perl/jwt_identity.json
 COPY identity.pl /etc/nginx/perl/identity.pl
 
 COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx /var/lib/nginx
 
 ENV ORG_ID="1001"
 

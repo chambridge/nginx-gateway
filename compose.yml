@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  nginx-gateway:
+    image: nginx-gateway:latest
+    container_name: nginx-gateway
+    user: "$UID:$GID"
+    volumes:
+      - ./sockets:/sockets:Z
+      - ./insights-core:/usr/share/nginx/html/static/release:Z
+      - ./certs:/etc/nginx/certs:Z
+    networks:
+      - gateway-network
+    depends_on:
+      - advisor-api
+      - inventory-api
+      - app
+
+  advisor-api:
+    image: python:3.11-alpine
+    container_name: advisor-api
+    command: ["python", "/mock.py"]
+    environment:
+      - MOCK_NAME=advisor-api
+    volumes:
+      - ./mock.py:/mock.py
+    networks:
+      - gateway-network
+
+  inventory-api:
+    image: python:3.11-alpine
+    container_name: inventory-api
+    command: ["python", "/mock.py"]
+    environment:
+      - MOCK_NAME=inventory-api
+    volumes:
+      - ./mock.py:/mock.py
+    networks:
+      - gateway-network
+
+  app:
+    image: python:3.11-alpine
+    container_name: app
+    command: ["python", "/mock.py"]
+    environment:
+      - MOCK_NAME=app
+    volumes:
+      - ./mock.py:/mock.py
+    networks:
+      - gateway-network
+
+networks:
+  gateway-network:
+    name: gateway-network
+  
