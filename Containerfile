@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9/nginx-124:latest
 
 USER root
 
-RUN dnf install -y nginx-mod-http-perl \
+RUN dnf install -y nginx-mod-http-perl perl-JSON \
     && dnf clean all
 
 # Create directories and set permissions
@@ -11,7 +11,7 @@ RUN mkdir -p /usr/share/nginx/html/static/release \
     && mkdir -p /etc/nginx/certs \
     && mkdir -p /var/log/nginx \
     && mkdir -p /etc/nginx/perl \
-    && chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx/perl \
+    && chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx \
     && chmod 770 /sockets \
     && chmod 770 /var/log/nginx
 
