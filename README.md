@@ -24,37 +24,27 @@ podman build -t nginx-gateway:latest .
 
 The image includes:
 - NGINX configuraton with mTLS and custom headers.
-- Static files (`insights-core.egg`, `insights-core.egg.asc`).
-- Certificates and JSON templates.
+- JSON templates.
+- Mounts the static files (`insights-core.egg`, `insights-core.egg.asc`).
+- Mounts the certificate files.
 
 ### Run the Container
 Create a podman network and run the container with a mounted socket directory:
 
 ```
-podman network create my-network
-
-podman run -d --network my-network \
-    --name nginx-gateway \ 
-    -v /path/to/sockets:/sockets:Z \
-    nginx-gateway:latest
+podman compose up
 ```
+This currently creates the upstream dependencies for the reverse proxy routing.
+
+_Still working through the unix socket interaction with mTLS._
+
 
 ### Example Usage
-NGINX listens on /sockets/nginx.sock with mTLS. Use curl with the --unix-socket option and client certificates to test.
-
-#### Common curl Options
-
-```
-BASE_CMD="curl --unix-socket /path/to/sockets/nginx.sock \
-    --cert certs/client.crt \
-    --key certs/client.key \
-    -v"
-```
 
 #### Basic Request
 
 ```
-$BASE_CMD https://localhost/api/inventory/v1/hosts
+curl http://localhost:8080/api/inventory/v1/hosts
 ```
 
 - Response: Proxied to inventory-api pod
@@ -63,7 +53,7 @@ $BASE_CMD https://localhost/api/inventory/v1/hosts
 #### Request with passed x-alt-req-id
 
 ```
-$BASE_CMD -H"x-alt-req-id: 1111-2222-3333-4444" https://localhost/api/inventory/v1/hosts
+curl -H"x-alt-req-id: 1111-2222-3333-4444" http://localhost:8080/api/inventory/v1/hosts
 ```
 
 - Headers pass on the request id and create empty identity header
@@ -71,11 +61,7 @@ $BASE_CMD -H"x-alt-req-id: 1111-2222-3333-4444" https://localhost/api/inventory/
 #### cert-auth Type
 
 ```
-$BASE_CMD \
-    -H"x-auth-type: cert-auth" \
-    -H"x-cn: cn-id-example" \
-    -H"x-org-id: 1234567" \
-    https://localhost/api/inventory/v1/hosts
+curl -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" http://localhost:8080/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a cert identity header json
@@ -83,11 +69,11 @@ $BASE_CMD \
 #### jwt-auth Type
 
 ```
-$BASE_CMD \
-    -H"x-auth-type: jwt-auth" \
-    -H"x-user: {\"username\":\"jdoe\", \"email\": \"jdoe@examle.com\", \"first_name\": \"John\", \"last_name\": \"Doe\"}" \
+USER=`echo "{\"username\":\"jdoe\", \"email\": \"jdoe@examle.com\", \"first_name\": \"John\", \"last_name\": \"Doe\"}" | base64`
+curl -H"x-auth-type: jwt-auth" \
+    -H"x-user: $USER" \
     -H"x-org-id: 1234567" \
-    https://localhost/api/inventory/v1/hosts
+    http://localhost:8080/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a jwt identity header json
