@@ -1,4 +1,5 @@
 use JSON;
+use MIME::Base64;
 
 sub set_identity_header {
     my $r = shift;
@@ -10,6 +11,7 @@ sub set_identity_header {
     my $jwt_template =decode_json($r->variable("jwt_template"));
 
     my $identity;
+    my $identity_b64;
 
     if($auth_type eq "cert-auth") {
         $cert_template->{cn} = $r->header_in("x-cn") || "unknown";
@@ -31,8 +33,9 @@ sub set_identity_header {
         $identity = "{}";
     }
 
-    r->header_out("x-rh-identity", $identity);
-    return NGX_OK;
+    $identity_b64 = encode_base64($identity);
+    r->header_out("x-rh-identity", $identity_b64);
+    return identity_b64;
 }
 
 1;

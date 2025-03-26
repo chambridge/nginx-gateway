@@ -5,10 +5,14 @@ services:
     image: nginx-gateway:latest
     container_name: nginx-gateway
     user: "$UID:$GID"
+    # command: [ "/bin/bash", "-c", "--", "while true; do sleep 30; done;" ]
+    ports:
+      # - "8443:443"
+      - "8080:8080"
     volumes:
-      - ./sockets:/sockets:Z
       - ./insights-core:/usr/share/nginx/html/static/release:Z
       - ./certs:/etc/nginx/certs:Z
+      - ./sockets:/sockets:Z
     networks:
       - gateway-network
     depends_on:

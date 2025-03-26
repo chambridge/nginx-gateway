@@ -8,11 +8,11 @@ RUN dnf install -y nginx-mod-http-perl perl-JSON \
 # Create directories and set permissions
 RUN mkdir -p /usr/share/nginx/html/static/release \
     && mkdir -p /sockets \
+    && mkdir -p /run \
     && mkdir -p /etc/nginx/certs \
     && mkdir -p /var/log/nginx \
     && mkdir -p /etc/nginx/perl \
     && mkdir -p /var/lib/nginx/tmp/client_body \
-    && chmod 770 /sockets \
     && chmod 770 /var/log/nginx \
     && chmod -R 750 /var/lib/nginx
 
@@ -22,7 +22,7 @@ COPY identity.pl /etc/nginx/perl/identity.pl
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx /var/lib/nginx
+RUN chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx /var/lib/nginx /run
 
 ENV ORG_ID="1001"
 
