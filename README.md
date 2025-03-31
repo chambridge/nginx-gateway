@@ -36,7 +36,7 @@ podman compose up
 ```
 This currently creates the upstream dependencies for the reverse proxy routing.
 
-_Still working through the unix socket interaction with mTLS._
+_Still working through mTLS setup._
 
 
 ### Example Usage
@@ -44,7 +44,7 @@ _Still working through the unix socket interaction with mTLS._
 #### Basic Request
 
 ```
-curl http://localhost:8080/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock http://localhost/api/inventory/v1/hosts
 ```
 
 - Response: Proxied to inventory-api pod
@@ -53,7 +53,7 @@ curl http://localhost:8080/api/inventory/v1/hosts
 #### Request with passed x-alt-req-id
 
 ```
-curl -H"x-alt-req-id: 1111-2222-3333-4444" http://localhost:8080/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock  -H"x-alt-req-id: 1111-2222-3333-4444" http://localhost/api/inventory/v1/hosts
 ```
 
 - Headers pass on the request id and create empty identity header
@@ -61,7 +61,7 @@ curl -H"x-alt-req-id: 1111-2222-3333-4444" http://localhost:8080/api/inventory/v
 #### cert-auth Type
 
 ```
-curl -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" http://localhost:8080/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock  -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" http://localhost/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a cert identity header json
@@ -70,10 +70,10 @@ curl -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" ht
 
 ```
 USER=`echo "{\"username\":\"jdoe\", \"email\": \"jdoe@examle.com\", \"first_name\": \"John\", \"last_name\": \"Doe\"}" | base64`
-curl -H"x-auth-type: jwt-auth" \
+curl --unix-socket /path/to/sockets/nginx.sock  -H"x-auth-type: jwt-auth" \
     -H"x-user: $USER" \
     -H"x-org-id: 1234567" \
-    http://localhost:8080/api/inventory/v1/hosts
+    http://localhost/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a jwt identity header json

@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9/nginx-124:latest
 
 USER root
 
-RUN dnf install -y nginx-mod-http-perl perl-JSON \
+RUN dnf install -y nginx-mod-http-perl perl-JSON-PP \
     && dnf clean all
 
 # Create directories and set permissions

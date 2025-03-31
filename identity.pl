@@ -1,6 +1,6 @@
 package identity;
 
-use JSON;
+use JSON::PP;
 use MIME::Base64;
 
 sub set_identity_header {
