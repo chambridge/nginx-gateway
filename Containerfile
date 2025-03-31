@@ -20,7 +20,7 @@ COPY cert_identity.json /etc/nginx/perl/cert_identity.json
 COPY jwt_identity.json /etc/nginx/perl/jwt_identity.json
 COPY identity.pl /etc/nginx/perl/identity.pl
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN chown -R nginx:nginx /usr/share/nginx/html /sockets /etc/nginx/certs /var/log/nginx /etc/nginx /var/lib/nginx /run
 
