@@ -11,6 +11,7 @@ services:
       - ./insights-core:/usr/share/nginx/html/static/release:Z
       - ./certs:/etc/nginx/certs:Z
       - ./sockets:/sockets:Z
+      - ./nginx.conf:/etc/nginx/nginx.conf:Z
     networks:
       - gateway-network
     depends_on:
