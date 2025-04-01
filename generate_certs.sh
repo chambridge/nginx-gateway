@@ -4,18 +4,16 @@ CERT_DIR="certs"
 
 mkdir -p "$CERT_DIR"
 
-openssl genrsa -out "$CERT_DIR/ca.key" 2048
-openssl req -new -x509 -new -nodes -key "$CERT_DIR/ca.key" -sha256  -days 365 -out "$CERT_DIR/ca.crt" -subj "/O=MyOrg/CN=MyCA"
+openssl genpkey -algorithm RSA -out "$CERT_DIR/ca.key"
+openssl req -new -x509 -key "$CERT_DIR/ca.key" -out "$CERT_DIR/ca.crt"
 
-openssl genrsa -out "$CERT_DIR/nginx.key" 2048
-openssl req -new -key "$CERT_DIR/nginx.key" -out "$CERT_DIR/nginx.csr" -subj "/O=MyOrg/CN=nginx"
+openssl genpkey -algorithm RSA -out "$CERT_DIR/nginx.key"
+openssl req -new -key "$CERT_DIR/nginx.key" -out "$CERT_DIR/nginx.csr"
+openssl x509 -req -in "$CERT_DIR/nginx.csr" -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial -out "$CERT_DIR/nginx.crt"
 
-openssl x509 -req -in "$CERT_DIR/nginx.csr" -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial -out "$CERT_DIR/nginx.crt" -days 365 -sha256
-
-openssl genrsa -out "$CERT_DIR/client.key" 2048
-openssl req -new -key "$CERT_DIR/client.key" -out "$CERT_DIR/client.csr" -subj "/O=MyOrg/CN=client"
-
-openssl x509 -req -in "$CERT_DIR/client.csr" -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial -out "$CERT_DIR/client.crt" -days 365 -sha256
+openssl genpkey -algorithm RSA -out "$CERT_DIR/client.key"
+openssl req -new -key "$CERT_DIR/client.key" -out "$CERT_DIR/client.csr"
+openssl x509 -req -in "$CERT_DIR/client.csr" -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial -out "$CERT_DIR/client.crt"
 
 rm -f "$CERT_DIR/nginx.csr" "$CERT_DIR/client.csr"
 
