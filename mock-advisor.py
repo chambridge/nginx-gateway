@@ -21,5 +21,5 @@ class MockHandler(BaseHTTPRequestHandler):
         self.wfile.write(f"OK from {os.getenv('MOCK_NAME', 'unknown')}".encode('utf-8'))
 
 if __name__ == "__main__":
-    server = HTTPServer(('0.0.0.0', 80), MockHandler)
+    server = HTTPServer(('0.0.0.0', 8080), MockHandler)
     server.serve_forever()

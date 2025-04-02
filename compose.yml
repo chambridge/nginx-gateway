@@ -20,7 +20,7 @@ services:
       - app
 
   advisor-api:
-    image: python:3.11-alpine
+    image: registry.access.redhat.com/ubi9/python-311:latest
     container_name: advisor-api
     command: ["python", "/mock.py"]
     environment:
@@ -31,7 +31,7 @@ services:
       - gateway-network
 
   inventory-api:
-    image: python:3.11-alpine
+    image: registry.access.redhat.com/ubi9/python-311:latest
     container_name: inventory-api
     command: ["python", "/mock.py"]
     environment:
@@ -42,7 +42,7 @@ services:
       - gateway-network
 
   app:
-    image: python:3.11-alpine
+    image: registry.access.redhat.com/ubi9/python-311:latest
     container_name: app
     command: ["python", "/mock.py"]
     environment:

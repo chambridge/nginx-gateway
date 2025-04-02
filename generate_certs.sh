@@ -3,8 +3,8 @@
 
 CERT_DIR="certs"
 CA_SUBJECT="/CN=My CA"
-NGINX_SUBJECT="/CN=nginx.example.com"
-CLIENT_SUBJECT="/CN=client.example.com"
+NGINX_SUBJECT="/CN=localhost"
+CLIENT_SUBJECT="/CN=localhost"
 
 
 # Create directory if it doesn't exist
