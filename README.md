@@ -44,7 +44,7 @@ _Still working through mTLS setup._
 #### Basic Request
 
 ```
-curl --unix-socket /path/to/sockets/nginx.sock http://localhost/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock --cert certs/client.crt --key certs/client.key --cacert certs/ca.crt https://localhost/api/inventory/v1/hosts
 ```
 
 - Response: Proxied to inventory-api pod
@@ -53,7 +53,7 @@ curl --unix-socket /path/to/sockets/nginx.sock http://localhost/api/inventory/v1
 #### Request with passed x-alt-req-id
 
 ```
-curl --unix-socket /path/to/sockets/nginx.sock  -H"x-alt-req-id: 1111-2222-3333-4444" http://localhost/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock  -H"x-alt-req-id: 1111-2222-3333-4444" --cert certs/client.crt --key certs/client.key --cacert certs/ca.crt https://localhost/api/inventory/v1/hosts
 ```
 
 - Headers pass on the request id and create empty identity header
@@ -61,7 +61,7 @@ curl --unix-socket /path/to/sockets/nginx.sock  -H"x-alt-req-id: 1111-2222-3333-
 #### cert-auth Type
 
 ```
-curl --unix-socket /path/to/sockets/nginx.sock  -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" http://localhost/api/inventory/v1/hosts
+curl --unix-socket /path/to/sockets/nginx.sock  -H"x-auth-type: cert-auth" -H"x-cn: cn-id-example" -H"x-org-id: 1234567" --cert certs/client.crt --key certs/client.key --cacert certs/ca.crt https://localhost/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a cert identity header json
@@ -73,7 +73,8 @@ USER=`echo "{\"username\":\"jdoe\", \"email\": \"jdoe@examle.com\", \"first_name
 curl --unix-socket /path/to/sockets/nginx.sock  -H"x-auth-type: jwt-auth" \
     -H"x-user: $USER" \
     -H"x-org-id: 1234567" \
-    http://localhost/api/inventory/v1/hosts
+    --cert certs/client.crt --key certs/client.key --cacert certs/ca.crt \
+    https://localhost/api/inventory/v1/hosts
 ```
 
 - Headers generates request is and formats populates a jwt identity header json
